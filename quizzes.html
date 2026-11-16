@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice Quizzes · Taau Ai</title>
+    <meta name="description" content="Take topic or comprehensive practice quizzes with instant grading and weak-topic drills." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="quizzes">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a href="index.html" class="brand">Taau Ai</a>
+        <nav id="workspace-nav" class="nav nav-tabs">
+          <a href="index.html" class="nav-tab" data-nav="index">Overview</a>
+          <a href="plan.html" class="nav-tab" data-nav="plan">Study Plan</a>
+          <a href="summaries.html" class="nav-tab" data-nav="summaries">Summaries</a>
+          <a href="quizzes.html" class="nav-tab is-active" data-nav="quizzes">Quizzes</a>
+        </nav>
+        <button type="button" id="primary-action-btn" class="btn primary">+ New Subject</button>
+      </div>
+    </header>
+
+    <div id="workspace-view" class="workspace">
+      <aside class="sidebar">
+        <div class="stack-md" style="padding:20px">
+          <div class="row between"><h2 class="sidebar-title">My Subjects (<span id="subject-count">0</span>)</h2><button type="button" id="sidebar-add-btn" class="circle-btn" aria-label="Add subject">+</button></div>
+          <div id="subject-list" class="subject-list"></div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="min-0"><p class="small-strong">Local Study Desk</p><p class="meta">Saved in browser storage</p></div>
+        </div>
+      </aside>
+
+      <main class="workspace-main">
+        <section id="empty-subjects-state" class="card empty-card" hidden>
+          <h1 class="h2">Ready to set up your first exam</h1>
+          <p class="muted">Add a subject syllabus to start generating practice quizzes and weak-topic drills.</p>
+          <button type="button" id="empty-add-subject-btn" class="btn primary lg">Add Your First Subject</button>
+        </section>
+
+        <div id="subject-workspace" class="stack-lg" hidden>
+          <div class="row between wrap">
+            <div><h1 id="subject-title-heading" class="subject-title"></h1><p id="subject-meta-line" class="meta"></p></div>
+            <div class="card compact readiness-box">
+              <div class="row between"><span class="meta">Progress</span><span id="readiness-percent" class="mono lime">0%</span></div>
+              <div class="track"><div id="readiness-bar-fill" class="fill"></div></div>
+            </div>
+          </div>
+
+          <div class="kpi-strip">
+            <div class="card compact"><span class="meta">Days Left</span><span id="kpi-days" class="kpi">0d</span></div>
+            <div class="card compact"><span class="meta">Milestones Done</span><span id="kpi-milestones" class="kpi">0/0</span></div>
+            <div class="card compact"><span class="meta">Quiz Average</span><span id="kpi-quiz-avg" class="kpi">—</span></div>
+          </div>
+
+          <section id="panel-quizzes">
+            <div class="row between wrap" style="margin-bottom:18px">
+              <div><p class="meta">Instant grading with step-by-step explanations</p><h2 class="h2">Practice Quizzes</h2></div>
+              <div class="row wrap">
+                <select id="quiz-topic-select" class="pill-select" aria-label="Quiz topic"></select>
+                <select id="quiz-difficulty-select" class="pill-select" aria-label="Difficulty"><option value="standard">Standard</option><option value="intensive">Intensive</option></select>
+                <select id="quiz-count-select" class="pill-select mono" aria-label="Count"><option value="5">5 Qs</option><option value="10">10 Qs</option><option value="15">15 Qs</option></select>
+                <button type="button" id="start-quiz-btn" class="btn primary">Start Quiz</button>
+                <button type="button" id="drill-weak-btn" class="btn amber-btn" hidden>Drill Missed</button>
+              </div>
+            </div>
+            <p id="quiz-error" class="banner error" role="alert" hidden></p>
+            <div id="quizzes-container"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- Add Subject Modal -->
+    <div id="add-subject-modal" class="modal-backdrop" role="dialog" aria-modal="true" hidden>
+      <div class="card flush modal-dialog">
+        <div class="row between card-pad border-b" style="background:var(--muted-bg)">
+          <div><h2 class="h3">Add Exam Subject</h2><p class="meta">Enter subject details and paste your syllabus units.</p></div>
+          <button type="button" id="close-modal-btn" class="circle-btn" aria-label="Close">&times;</button>
+        </div>
+        <form id="add-subject-form" class="stack-md" style="padding:22px">
+          <div class="form-grid-4">
+            <div class="field span-2"><label for="new-subject-title">Subject Name</label><input id="new-subject-title" maxlength="120" required placeholder="Subject name" /></div>
+            <div class="field"><label for="new-subject-date">Exam Date</label><input id="new-subject-date" type="date" required class="mono" /></div>
+            <div class="field"><label for="new-subject-hours">Hours / Day</label><input id="new-subject-hours" type="number" min="0.5" max="14" step="0.5" required placeholder="Hours/day" class="mono" /></div>
+          </div>
+          <div class="field">
+            <label for="new-subject-syllabus">Syllabus Units</label>
+            <textarea id="new-subject-syllabus" rows="5" required placeholder="Paste syllabus units or topic bullets..."></textarea>
+          </div>
+          <p id="modal-error" class="banner error" role="alert" hidden></p>
+          <div class="row end border-t" style="padding-top:14px"><button type="button" id="cancel-modal-btn" class="btn secondary">Cancel</button><button type="submit" id="submit-subject-btn" class="btn primary">Build Study Plan</button></div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "Remix Taau Ai",
+  "description": "One-stop last-minute exam preparation and revision platform with AI study plans, summaries, practice quizzes, flashcards, and milestone tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
